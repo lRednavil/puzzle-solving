@@ -1,0 +1,33 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+long long solution(vector<int> food_times, long long k) {
+    k++;
+    long long time_sum = 0;
+    long long len = food_times.size();
+    unordered_map<int, int> m;
+    
+    for(long long i = 0; i < len; i++){
+        m[food_times[i] ]++;
+        time_sum += food_times[i];
+    }
+    if(time_sum < k) return -1;
+    
+    int left_food = len, amount = 1;
+    
+    for(; left_food < k && left_food; amount++){
+        k -= left_food;
+        left_food -= m[amount];
+    }
+    if(!left_food) return -1;
+    
+    for(long long i = 0; k; i++){
+        if(food_times[i] >= amount) k--;
+        if(!k) return i+1;
+    }
+    
+    return 0;
+}
